@@ -115,6 +115,11 @@ YOUR OWN RISK."
   :type 'boolean
   :group 'company-shell)
 
+(defcustom company-shell-meta-enable nil
+  "Enable metadata"
+  :type 'booleann
+  :group 'company-shell)
+
 (defun company-shell--fetch-candidates ()
   "Fetch the list of all shell completions.
 Build it if necessary."
@@ -230,7 +235,8 @@ Should only be tried when ARG has no man page."
     (no-cache    nil)
     (annotation  "Fish Function")
     (doc-buffer  (company-shell--doc-buffer arg))
-    (meta        (company-shell--meta-string arg))
+    (meta        (if company-shell-meta-enable
+                     (company-shell--meta-string arg)))
     (candidates  (cl-remove-if-not
                   (lambda (candidate) (string-prefix-p arg candidate))
                   (company-shell--fetch-fish-candidates)))))
@@ -248,7 +254,8 @@ Should only be tried when ARG has no man page."
     (no-cache    nil)
     (annotation  (get-text-property 0 'origin arg))
     (doc-buffer  (company-shell--doc-buffer arg))
-    (meta        (company-shell--meta-string arg))
+    (meta        (if company-shell-meta-enable
+                     (company-shell--meta-string arg)))
     (candidates  (cl-remove-if-not
                   (lambda (candidate) (string-prefix-p arg candidate))
                   (company-shell--fetch-candidates)))))
